@@ -3,7 +3,7 @@ Repository fetcher and collector of all things BlankBox
 
 # Prerequites
 
-You must has a folder that is used for BlankBox only repositories.
+You must have a folder that is used for BlankBox only repositories.
 
 For example:
 
