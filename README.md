@@ -1,7 +1,7 @@
-## Universe
+# Universe
 Repository fetcher and collector of all things BlankBox
 
-# Prerequites
+## Prerequites
 
 You must have a folder that is used for BlankBox only repositories.
 
@@ -18,3 +18,7 @@ This repo should then be child to that:
 All other respositories will be sibling or deeper to this repo.
 
 You can then run the update command to fetch the master of any repos that you have access to.
+
+Currently, just run:
+
+``node request.js``
