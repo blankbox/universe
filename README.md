@@ -1,18 +1,27 @@
 # Universe
-Repository fetcher and collector of all things BlankBox
+
+Repository fetcher.
+
+Given an organsation, this project clones or pulls all of the repositories within it.
+
+A UNIVERSE is considered a folder which contains all this organisations repositories, including this one.
 
 ## Prerequites
 
-You must have a folder that is used for BlankBox only repositories.
+You must have a folder that is used for UNIVERSE only repositories.
 
 For example:
 
-``~/blankbox/``
+```
+~/blankbox/
+```
 
 
 This repo should then be child to that:
 
-``~/blankbox/universe/``
+```
+~/blankbox/universe/
+```
 
 
 All other respositories will be sibling or deeper to this repo.
@@ -21,4 +30,6 @@ You can then run the update command to fetch the master of any repos that you ha
 
 Currently, just run:
 
-``node request.js``
+```
+node request.js
+```
