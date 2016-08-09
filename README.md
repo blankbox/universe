@@ -7,12 +7,12 @@ You must has a folder that is used for BlankBox only repositories.
 
 For example:
 
-```~/blankbox/```
+``~/blankbox/``
 
 
 This repo should then be child to that:
 
-```~/blankbox/universe/```
+``~/blankbox/universe/``
 
 
 All other respositories will be sibling or deeper to this repo.
