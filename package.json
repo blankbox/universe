@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/blankbox/universe/issues"
   },
-  "homepage": "https://github.com/blankbox/universe#readme"
+  "homepage": "https://github.com/blankbox/universe#readme",
+  "dependencies": {
+    "dotenv-safe": "^2.3.1",
+    "simple-git": "^1.45.0",
+    "tracer": "^0.8.3"
+  }
 }
