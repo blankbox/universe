@@ -74,7 +74,7 @@ var requestHandler = function (error, response, body) {
     // body is a JSON array of objects containing repository data
     var repos = JSON.parse(body);
 
-    debug.info('Found', repos.length, process.env.UNIVERSE, 'reponsitories');
+    debug.info('Found', repos.length, process.env.UNIVERSE, 'repositories');
 
     // Loop through each repo
     for (var i = 0; i < repos.length; i++) {
