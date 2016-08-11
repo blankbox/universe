@@ -87,18 +87,18 @@ var requestHandler = function (error, response, body) {
       }
 
     }
+    //Check for more - if we got as many repos as the request limit, could have missed some, so repeat the request for the next page
+    if (repos.length >= perPage){
+      pageNumber ++;
+      nextRequest = buildOpts(pageNumber, perPage);
+      request(nextRequest, requestHandler);
+    }
 
   } else {
     debug.error('Error with request', error);
   }
 
 
-  //Check for more - if we got as many repos as the request limit, could have missed some, so repeat the request for the next page
-  if (repos.length >= perPage){
-    pageNumber ++;
-    nextRequest = buildOpts(pageNumber, perPage);
-    request(nextRequest, requestHandler);
-  }
 
 }
 
