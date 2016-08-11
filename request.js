@@ -13,9 +13,15 @@ var rootPath = __dirname + '/../';
 // Create an options object that references the organsation being used - organisation URL part
 // Will fetch all repos within the organsation being referenced
 // Set User-Agent as lacking this will throw the API request
-var requestOpts = {
-  url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos',
-  headers : {'User-Agent': process.env.UNIVERSE}
+
+var pageNumber = 1; //Start with the first page
+var perPage = 2; //Max is 100
+
+buildOpts = function (pageNumber, perPage) {
+  return requestOpts = {
+    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?per_page=' + perPage + '&page=' + pageNumber,
+    headers : {'User-Agent': process.env.UNIVERSE}
+  }
 }
 
 // Clone or pull a repo
@@ -60,7 +66,7 @@ var grabRepo = function (repoName, repoUrl, repoFullName) {
 }
 
 // Create handler for the request response
-var requstHandler = function (error, response, body) {
+var requestHandler = function (error, response, body) {
 
   // If all is well, and the API servers a valid response - continue
   if (!error && response.statusCode == 200) {
@@ -85,6 +91,19 @@ var requstHandler = function (error, response, body) {
   } else {
     debug.error('Error with request', error);
   }
+
+
+  //Check for more - if we got as many repos as the request limit, could have missed some, so repeat the request for the next page
+  if (repos.length >= perPage){
+    pageNumber ++;
+    console.log(pageNumber);
+    nextRequest = buildOpts(pageNumber, perPage);
+    console.log(nextRequest);
+    request(nextRequest, requestHandler);
+  }
+
 }
 
-request(requestOpts, requstHandler)
+var requestOpts = buildOpts(pageNumber, perPage);
+
+request(requestOpts, requestHandler);
