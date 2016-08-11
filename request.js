@@ -17,7 +17,7 @@ var rootPath = __dirname + '/../';
 var pageNumber = 1; //Start with the first page
 var perPage = 2; //Max is 100
 
-buildOpts = function (pageNumber, perPage) {
+var buildOpts = function (pageNumber, perPage) {
   return requestOpts = {
     url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?per_page=' + perPage + '&page=' + pageNumber,
     headers : {'User-Agent': process.env.UNIVERSE}
@@ -96,9 +96,7 @@ var requestHandler = function (error, response, body) {
   //Check for more - if we got as many repos as the request limit, could have missed some, so repeat the request for the next page
   if (repos.length >= perPage){
     pageNumber ++;
-    console.log(pageNumber);
     nextRequest = buildOpts(pageNumber, perPage);
-    console.log(nextRequest);
     request(nextRequest, requestHandler);
   }
 
