@@ -1,5 +1,6 @@
 var request = require('request');
 var git = require('simple-git');
+var qs = require('querystring');
 
 var debug  = require('tracer').colorConsole();
 
@@ -10,16 +11,21 @@ require('dotenv-safe').load({path: '.env-public', sample: '.env-public-sample'})
 // @TODO consider automatically categorising repos by name and nesting them in folders
 var rootPath = __dirname + '/../';
 
-// Create an options object that references the organsation being used - organisation URL part
-// Will fetch all repos within the organsation being referenced
-// Set User-Agent as lacking this will throw the API request
-
 var pageNumber = 1; //Start with the first page
 var perPage = 2; //Max is 100
 
+// Create an options object that references the organsation being used - organisation URL part
+// Will fetch all repos within the organsation being referenced
+// Set User-Agent as lacking this will throw the API request
 var buildOpts = function (pageNumber, perPage) {
+
+  var pagination = qs.encode({
+    per_page: perPage,
+    page: pageNumber
+  });
+
   return requestOpts = {
-    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?per_page=' + perPage + '&page=' + pageNumber,
+    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?' + pagination,
     headers : {'User-Agent': process.env.UNIVERSE}
   }
 }
@@ -97,8 +103,6 @@ var requestHandler = function (error, response, body) {
   } else {
     debug.error('Error with request', error);
   }
-
-
 
 }
 
