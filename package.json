@@ -18,6 +18,7 @@
   "homepage": "https://github.com/blankbox/universe#readme",
   "dependencies": {
     "dotenv-safe": "^2.3.1",
+    "request": "^2.74.0",
     "simple-git": "^1.45.0",
     "tracer": "^0.8.3"
   }
