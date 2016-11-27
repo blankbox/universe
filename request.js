@@ -5,28 +5,29 @@ var qs = require('querystring');
 var debug  = require('tracer').colorConsole();
 
 // Load environment vars
-require('dotenv-safe').load({path: '.env-public', sample: '.env-public-sample'});
+require('dotenv-safe').load({path: '.env', sample: '.env-sample'});
 
 // Assumes a single path contains this repo and the other repos as siblings
 // @TODO consider automatically categorising repos by name and nesting them in folders
 var rootPath = __dirname + '/../';
 
 var pageNumber = 1; //Start with the first page
-var perPage = 2; //Max is 100
+var perPage = 50; //Max is 100
 
 // Create an options object that references the organsation being used - organisation URL part
 // Will fetch all repos within the organsation being referenced
 // Set User-Agent as lacking this will throw the API request
 var buildOpts = function (pageNumber, perPage) {
 
-  var pagination = qs.encode({
+  var queryString = qs.encode({
     per_page: perPage,
-    page: pageNumber
+    page: pageNumber,
+    access_token: process.env.GH_KEY
   });
 
   return requestOpts = {
-    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?' + pagination,
-    headers : {'User-Agent': process.env.UNIVERSE}
+    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?' + queryString,
+    headers : {'User-Agent': process.env.GH_USER}
   }
 }
 
