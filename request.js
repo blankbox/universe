@@ -1,35 +1,22 @@
 var request = require('request');
 var git = require('simple-git');
-var qs = require('querystring');
 
 var debug  = require('tracer').colorConsole();
 
 // Load environment vars
-require('dotenv-safe').load({path: '.env', sample: '.env-sample'});
+require('dotenv-safe').load({path: '.env-private', sample: '.env-private-sample'});
 
 // Assumes a single path contains this repo and the other repos as siblings
 // @TODO consider automatically categorising repos by name and nesting them in folders
 var rootPath = __dirname + '/../';
 
-var pageNumber = 1; //Start with the first page
-var perPage = 50; //Max is 100
-
 // Create an options object that references the organsation being used - organisation URL part
 // Will fetch all repos within the organsation being referenced
 // Set User-Agent as lacking this will throw the API request
-var buildOpts = function (pageNumber, perPage) {
-
-  var queryString = qs.encode({
-    per_page: perPage,
-    page: pageNumber,
-    access_token: process.env.GH_KEY
-  });
-
-  return requestOpts = {
-    url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos?' + queryString,
-    headers : {'User-Agent': process.env.GH_USER}
-  }
-}
+var requestOpts = {
+  url: 'https://api.github.com/orgs/' + process.env.ORG + '/repos',
+  headers : {'User-Agent': process.env.UNIVERSE}
+};
 
 // Clone or pull a repo
 var grabRepo = function (repoName, repoUrl, repoFullName) {
@@ -73,7 +60,7 @@ var grabRepo = function (repoName, repoUrl, repoFullName) {
 }
 
 // Create handler for the request response
-var requestHandler = function (error, response, body) {
+var requstHandler = function (error, response, body) {
 
   // If all is well, and the API servers a valid response - continue
   if (!error && response.statusCode == 200) {
@@ -81,7 +68,7 @@ var requestHandler = function (error, response, body) {
     // body is a JSON array of objects containing repository data
     var repos = JSON.parse(body);
 
-    debug.info('Found', repos.length, process.env.UNIVERSE, 'repositories');
+    debug.info('Found', repos.length, process.env.UNIVERSE, 'reponsitories');
 
     // Loop through each repo
     for (var i = 0; i < repos.length; i++) {
@@ -94,19 +81,10 @@ var requestHandler = function (error, response, body) {
       }
 
     }
-    //Check for more - if we got as many repos as the request limit, could have missed some, so repeat the request for the next page
-    if (repos.length >= perPage){
-      pageNumber ++;
-      nextRequest = buildOpts(pageNumber, perPage);
-      request(nextRequest, requestHandler);
-    }
 
   } else {
     debug.error('Error with request', error);
   }
-
 }
 
-var requestOpts = buildOpts(pageNumber, perPage);
-
-request(requestOpts, requestHandler);
+request(requestOpts, requstHandler)
